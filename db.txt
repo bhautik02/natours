@@ -1,0 +1,1 @@
+mongosh "mongodb+srv://nasacluster.nv87djh.mongodb.net/test" --apiVersion 1 --username bhautik02
