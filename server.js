@@ -2,6 +2,12 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+process.on('uncaughtException', (err) => {
+  console.log('uncaughtException : shutting down');
+  console.log(err.message);
+  process.exit(1);
+});
+
 dotenv.config({ path: './config.env' });
 const app = require('./app');
 
@@ -9,10 +15,6 @@ const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connection.once('open', () => {
   console.log('MongoDB connection ready!');
-});
-
-mongoose.connection.on('error', (err) => {
-  console.error(err);
 });
 
 function mongoConnect() {
@@ -40,6 +42,6 @@ mongoConnect();
 //   });
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => {
+let server = app.listen(PORT, () => {
   console.log(`App running on 3000...`);
 });
