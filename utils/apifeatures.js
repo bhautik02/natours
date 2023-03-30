@@ -12,7 +12,7 @@ class APIFeatures {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(lt|lte|gt|gte)\b/g, (match) => `$${match}`);
 
-    console.log(this.queryString);
+    // console.log(this.queryString);
 
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
@@ -33,7 +33,7 @@ class APIFeatures {
     if (this.queryString.fields) {
       console.log(this.queryString.fields);
       const fields = this.queryString.fields.split(',').join(' ');
-      console.log(fields);
+      // console.log(fields);
       this.query = this.query.select(fields);
     } else {
       this.query = this.query.select('-__v');

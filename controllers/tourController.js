@@ -17,7 +17,7 @@ const getAllTours = catchAsync(async (req, res, next) => {
     .sort()
     .limitFileds()
     .paginate();
-  console.log(req.query);
+  // console.log(req.query);
   const tours = await features.query;
 
   //BUILD QUERY
