@@ -6,6 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const Tour = require('./models/tourModel');
+const User = require('./models/userModel');
+const Review = require('./models/reviewModel');
 
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -29,7 +31,19 @@ mongoConnect();
 //READ JSON FILE
 const tours = JSON.parse(
   fs.readFileSync(
-    path.join(__dirname, 'dev-data', 'data', 'tours-simple.json'),
+    path.join(__dirname, 'dev-data', 'data', 'tours.json'),
+    'utf-8'
+  )
+);
+const users = JSON.parse(
+  fs.readFileSync(
+    path.join(__dirname, 'dev-data', 'data', 'users.json'),
+    'utf-8'
+  )
+);
+const reviews = JSON.parse(
+  fs.readFileSync(
+    path.join(__dirname, 'dev-data', 'data', 'reviews.json'),
     'utf-8'
   )
 );
@@ -39,6 +53,8 @@ const tours = JSON.parse(
 async function importData() {
   try {
     await Tour.create(tours);
+    await User.create(users, { validateBeforeSave: false });
+    await Review.create(reviews);
     console.log('Data loaded successfully...');
   } catch (err) {
     console.log(err.message);
@@ -50,6 +66,8 @@ async function importData() {
 async function deleteData() {
   try {
     await Tour.deleteMany();
+    await User.deleteMany();
+    await Review.deleteMany();
     console.log('Data deleted successfully');
   } catch (err) {
     console.log(err.message);

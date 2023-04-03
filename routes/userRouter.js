@@ -2,8 +2,9 @@ const express = require('express');
 
 const {
   getAllUsers,
-  postUser,
+  createUser,
   getUser,
+  getMe,
   updateUser,
   deleteUser,
   updateMe,
@@ -16,21 +17,27 @@ const {
   forgotPassword,
   resetPassword,
   updatePassword,
+  restrictTo,
 } = require('../controllers/authController');
+const { getOne } = require('../controllers/handlerFactory');
 
 const userRouter = express.Router();
 
 userRouter.post('/signup', signUp);
 userRouter.post('/login', login);
-
 userRouter.post('/forgotPassword', forgotPassword);
 userRouter.patch('/resetPassword/:token', resetPassword);
 
-userRouter.patch('/updateMyPassword', protect, updatePassword);
-userRouter.patch('/updateMe', protect, updateMe);
-userRouter.delete('/deleteMe', protect, deleteMe);
+userRouter.use(protect);
 
-userRouter.route('/').get(getAllUsers).post(postUser);
+userRouter.get('/me', getMe, getUser);
+userRouter.patch('/updateMyPassword', updatePassword);
+userRouter.patch('/updateMe', updateMe);
+userRouter.delete('/deleteMe', deleteMe);
+
+userRouter.use(restrictTo('admin'));
+
+userRouter.route('/').get(getAllUsers).post(createUser);
 
 userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 
